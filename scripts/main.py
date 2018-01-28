@@ -39,7 +39,7 @@ def run_recognition():
     except:
         print('wtf rek')
 
-def reset_state(wait_time=20):
+def reset_state(wait_time=10):
     global is_food, is_dishes
     is_food = False
     is_dishes = False
@@ -69,7 +69,7 @@ if __name__=="__main__":
                 elif is_dishes:
                     slack_handler.upload_file('SHAME SHAME SHAME', 'Please clear the mess up', filename)
                 print('Sleep')
-                reset_state(wait_time=60)
+                reset_state(wait_time=30)
             else:
                 reset_state()
         except Exception as ex:
