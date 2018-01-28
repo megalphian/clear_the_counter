@@ -5,8 +5,6 @@ import io
 import cv2
 import boto3
 
-from threading import Timer
-
 s3 = boto3.client('s3')
 rekt = boto3.client('rekognition')
 bucket_name = 'hacked2018'
@@ -28,18 +26,20 @@ def run_recognition(img):
         "Name": filename
         }
         }, MinConfidence=min_confidence)
-        print(response)
+        return response
     except:
         print('wtf rek')
 
-cam = cv2.VideoCapture(0)
-# while True:
-try:
-    ret_val, img = cam.read()
-    cv2.imwrite(filename, img)
-    upload_to_s3()
-    # cv2.imshow('my webcam', img)
-    run_recognition(img)
-except Exception as ex:
-    print('wtf')
-    print(ex)
+if __name__=="__main__":
+    cam = cv2.VideoCapture(0)
+    # while True:
+    try:
+        ret_val, img = cam.read()
+        cv2.imwrite(filename, img)
+        upload_to_s3()
+        # cv2.imshow('my webcam', img)
+        response = run_recognition(img)
+        type(response)
+    except Exception as ex:
+        print('wtf')
+        print(ex)
