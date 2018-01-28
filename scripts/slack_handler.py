@@ -1,5 +1,4 @@
-import requests
-import logging
+
 import os
 import io
 
@@ -17,6 +16,7 @@ def send_message(message, attachment=None):
         text=message,
         attachments=attachment
     )
+    # print('Notifiying')
 
 def upload_file(filename, content):
     slack_client.api_call(

@@ -19,7 +19,7 @@ is_food=False
 is_dishes=False
 
 food_list = ['Food', 'Banana', 'Pasta', 'Bottle', 'Beverage']
-dish_list = ['Pot', 'Cup', 'Dish', 'Plate', 'Fork', 'Spoon', 'Knife']
+dish_list = ['Pot', 'Pottery', 'Cup', 'Cutlery', 'Dish', 'Plate', 'Fork', 'Spoon', 'Knife']
 
 def upload_to_s3():
     try:
@@ -40,6 +40,7 @@ def run_recognition():
         print('wtf rek')
 
 def reset_state():
+    global is_food, is_dishes
     is_food = False
     is_dishes = False
     print('Waiting for the next check')
@@ -58,6 +59,7 @@ while True:
         for i in range(len(response['Labels'])):
             if (response['Labels'][i]['Name'] in food_list) and (is_food == False):
                 is_food = True
+                print('here')
                 slack_handler.send_message('FREE FOOOD')
             if (response['Labels'][i]['Name'] in dish_list) and (is_dishes == False):
                 is_dishes = True
