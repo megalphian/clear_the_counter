@@ -43,7 +43,7 @@ def reset_state():
     is_food = False
     is_dishes = False
     print('Waiting for the next check')
-    time.sleep(60)
+    time.sleep(20)
 
 if __name__=="__main__":
     cam = cv2.VideoCapture(0)
