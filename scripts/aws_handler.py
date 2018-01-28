@@ -5,6 +5,8 @@ import io
 import cv2
 import boto3
 
+import slack_handler
+
 s3 = boto3.client('s3')
 rekt = boto3.client('rekognition')
 bucket_name = 'hacked2018'
@@ -15,7 +17,7 @@ min_confidence = 70
 is_food=False
 is_dishes=False
 
-food_list = ['Food', 'Banana', 'Pasta']
+food_list = ['Food', 'Banana', 'Pasta', 'Bottle', 'Beverage']
 dish_list = ['Pot', 'Cup', 'Dish']
 
 def upload_to_s3():
@@ -42,6 +44,7 @@ def reset_state():
 
 if __name__=="__main__":
     cam = cv2.VideoCapture(0)
+
     # while True:
     try:
         ret_val, img = cam.read()
@@ -53,10 +56,10 @@ if __name__=="__main__":
         for i in range(len(response['Labels'])):
             if (response['Labels'][i]['Name'] in food_list) and (is_food == False):
                 is_food = True
-                print('FOOOOOD')
+                slack_handler.send_message('FOOOOOD')
             if (response['Labels'][i]['Name'] in dish_list) and (is_dishes == False):
                 is_dishes = True
-                print
+                slack_handler.send_message('Do yo goddamn dishes bruh')
         reset_state()
     except Exception as ex:
         print('wtf')
