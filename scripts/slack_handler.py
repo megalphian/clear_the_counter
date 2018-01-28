@@ -16,11 +16,11 @@ def send_message(message, attachment=None):
         text=message,
         attachments=attachment
     )
-    # print('Notifiying')
 
-def upload_file(slack_filename, file):
+def upload_file(text, slack_filename, file):
     slack_client.api_call(
     "files.upload",
+    initial_comment=text,
     filename=slack_filename,
     channels='#general',
     file=open(file, 'rb')

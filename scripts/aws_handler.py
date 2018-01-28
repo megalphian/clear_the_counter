@@ -59,12 +59,10 @@ while True:
         for i in range(len(response['Labels'])):
             if (response['Labels'][i]['Name'] in food_list) and (is_food == False):
                 is_food = True
-                slack_handler.send_message('FREE FOOOD')
-                slack_handler.upload_file('Get what you need', filename)
+                slack_handler.upload_file('FREE FOOOD', 'Get what you need', filename)
             if (response['Labels'][i]['Name'] in dish_list) and (is_dishes == False):
                 is_dishes = True
-                slack_handler.send_message('SHAME SHAME SHAME')
-                slack_handler.upload_file('Please clear the mess up', filename)
+                slack_handler.upload_file('SHAME SHAME SHAME', 'Please clear the mess up', filename)
         if (is_food==True) or (is_dishes==True):
             print('Sleep')
             reset_state(wait_time=60)
