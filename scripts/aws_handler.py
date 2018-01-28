@@ -39,12 +39,12 @@ def run_recognition():
     except:
         print('wtf rek')
 
-def reset_state():
+def reset_state(wait_time=20):
     global is_food, is_dishes
     is_food = False
     is_dishes = False
     print('Waiting for the next check')
-    time.sleep(20)
+    time.sleep(wait_time)
 
 if __name__=="__main__":
     cam = cv2.VideoCapture(0)
@@ -64,7 +64,11 @@ while True:
             if (response['Labels'][i]['Name'] in dish_list) and (is_dishes == False):
                 is_dishes = True
                 slack_handler.send_message('SHAME SHAME SHAME')
-        reset_state()
+        if (is_food==True) or (is_dishes==True):
+            print('Sleep')
+            reset_state(wait_time=60)
+        else:
+            reset_state()
     except Exception as ex:
         print('wtf')
         print(ex)
