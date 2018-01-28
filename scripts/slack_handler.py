@@ -1,6 +1,7 @@
 import requests
 import logging
 import os
+import io
 
 from slackclient import SlackClient
 
@@ -9,9 +10,18 @@ slack_client = SlackClient(SLACK_TOKEN)
 if slack_client.rtm_connect(with_team_state=False):
     print("Starter Bot connected and running!")
 
-def send_message(message):
+def send_message(message, attachment=None):
     slack_client.api_call(
         "chat.postMessage",
         channel="#general",
-        text=message
+        text=message,
+        attachments=attachment
+    )
+
+def upload_file(filename, content):
+    slack_client.api_call(
+    "files.upload",
+    filename=filename,
+    channels='#general',
+    file= io.BytesIO(str.encode(content))
     )

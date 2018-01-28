@@ -1,9 +1,10 @@
 import sys
 import os
-import io
+import time
 
 import cv2
 import boto3
+import json
 
 import slack_handler
 
@@ -18,7 +19,7 @@ is_food=False
 is_dishes=False
 
 food_list = ['Food', 'Banana', 'Pasta', 'Bottle', 'Beverage']
-dish_list = ['Pot', 'Cup', 'Dish']
+dish_list = ['Pot', 'Cup', 'Dish', 'Plate', 'Fork', 'Spoon', 'Knife']
 
 def upload_to_s3():
     try:
@@ -26,7 +27,7 @@ def upload_to_s3():
     except Exception as ex:
         print('wtf s3')
 
-def run_recognition(img):
+def run_recognition():
     try:
         response = rekt.detect_labels(Image={
         "S3Object":{
@@ -41,25 +42,26 @@ def run_recognition(img):
 def reset_state():
     is_food = False
     is_dishes = False
+    print('Waiting for the next check')
+    time.sleep(60)
 
 if __name__=="__main__":
     cam = cv2.VideoCapture(0)
 
-    # while True:
+while True:
     try:
         ret_val, img = cam.read()
         cv2.imwrite(filename, img)
         upload_to_s3()
-        # cv2.imshow('my webcam', img)
-        response = run_recognition(img)
-        print(len(response['Labels']))
+        response = run_recognition()
+        print(response['Labels'])
         for i in range(len(response['Labels'])):
             if (response['Labels'][i]['Name'] in food_list) and (is_food == False):
                 is_food = True
-                slack_handler.send_message('FOOOOOD')
+                slack_handler.send_message('FREE FOOOD')
             if (response['Labels'][i]['Name'] in dish_list) and (is_dishes == False):
                 is_dishes = True
-                slack_handler.send_message('Do yo goddamn dishes bruh')
+                slack_handler.send_message('SHAME SHAME SHAME')
         reset_state()
     except Exception as ex:
         print('wtf')
